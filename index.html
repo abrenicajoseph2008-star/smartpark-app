@@ -27,6 +27,8 @@ button{cursor:pointer}a{color:#176b44}footer{text-align:center;color:#748079;fon
 </head>
 <body>
 <header><h1>🅿️ SmartPark</h1><p>Find parking faster. Park smarter.</p></header>
+ <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#157347">
 <main>
 <div class="summary">
 <div class="stat"><b class="green" id="availableCount">0</b>Available</div>
@@ -67,4 +69,13 @@ document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("clic
 document.getElementById("toggleDemo").addEventListener("click",()=>{const s=slots[Math.floor(Math.random()*slots.length)];s.status=s.status==="available"?"occupied":"available";render()});
 render();
 </script>
+ <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("SmartPark installed successfully"))
+      .catch(error => console.log("Service worker error:", error));
+  });
+}
+ </script>
 </body></html>
