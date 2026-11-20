@@ -1,0 +1,12 @@
+
+{
+  "name": "SmartPark",
+  "short_name": "SmartPark",
+  "description": "SmartPark Mobile Parking Application",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f0f5f9",
+  "theme_color": "#157347",
+  "orientation": "portrait"
+}
