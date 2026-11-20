@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>SmartPark</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6f8;color:#17212b;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(135deg,#123b2b,#1d704b);color:white;padding:24px 18px 28px;border-radius:0 0 24px 24px}
+header h1{margin:0;font-size:27px}header p{margin:6px 0 0;color:#d8f3e5}
+main{max-width:650px;margin:auto;padding:16px}.summary{display:flex;gap:10px;margin-top:-10px}
+.stat{background:white;border-radius:14px;padding:14px;flex:1;box-shadow:0 3px 12px #152d2510;text-align:center}.stat b{display:block;font-size:24px}.green{color:#16844a}.red{color:#d93d3d}
+.search{margin:18px 0 10px}input{width:100%;padding:13px;border:1px solid #d4dde3;border-radius:12px;font-size:16px;background:white}
+.filters{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}.filters button,.demo{border:0;border-radius:20px;padding:10px 14px;background:#e3ece7;color:#215b40;font-weight:600}
+.filters button.active{background:#1c7049;color:white}
+.sectiontitle{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 10px}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slot{background:white;border:1px solid #e0e8e5;border-radius:16px;padding:14px;box-shadow:0 3px 12px #152d2508}
+.slot h3{margin:0 0 7px}.slot p{margin:5px 0;color:#62716a;font-size:13px}
+.status{display:inline-block;font-size:12px;font-weight:700;border-radius:20px;padding:6px 9px;margin-top:6px}
+.available{background:#e2f5e9;color:#16844a}.occupied{background:#fde8e8;color:#d93d3d}
+.details{margin-top:16px;background:white;border-radius:16px;padding:16px}.details h2{margin:0 0 10px}
+button{cursor:pointer}a{color:#176b44}footer{text-align:center;color:#748079;font-size:12px;padding:20px}
+@media(max-width:360px){.slots{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>🅿️ SmartPark</h1><p>Find parking faster. Park smarter.</p></header>
+<main>
+<div class="summary">
+<div class="stat"><b class="green" id="availableCount">0</b>Available</div>
+<div class="stat"><b class="red" id="occupiedCount">0</b>Occupied</div>
+<div class="stat"><b id="totalCount">0</b>Total slots</div>
+</div>
+<div class="search"><input id="search" placeholder="🔎 Search parking slot..." aria-label="Search parking slots"></div>
+<div class="filters"><button class="active" data-filter="all">All slots</button><button data-filter="available">Available</button><button data-filter="occupied">Occupied</button></div>
+<div class="sectiontitle"><h2>Parking slots</h2><button class="demo" id="toggleDemo">Toggle demo status</button></div>
+<div class="slots" id="slots"></div>
+<section class="details">
+<h2>Parking information</h2>
+<p><b>Location:</b> SmartPark Demo Parking Area</p>
+<p><b>Parking fee:</b> Sample rate — confirm with parking operator</p>
+<p><b>Operating hours:</b> Sample information, subject to change</p>
+<p><a target="_blank" rel="noopener" href="https://www.google.com/maps">Open Google Maps</a></p>
+</section>
+<footer>SmartPark prototype · Demo statuses only (not connected to live sensors)</footer>
+</main>
+<script>
+const slots=[
+ {id:"P1",status:"available",zone:"Near entrance"},
+ {id:"P2",status:"occupied",zone:"Center row"},
+ {id:"P3",status:"available",zone:"Near exit"}
+];
+let filter="all";
+const container=document.getElementById("slots");
+function render(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const list=slots.filter(s=>(filter==="all"||s.status===filter)&&(`${s.id} ${s.zone} ${s.status}`).toLowerCase().includes(q));
+ container.innerHTML=list.map(s=>`<article class="slot"><h3>🅿️ ${s.id}</h3><p>${s.zone}</p><span class="status ${s.status}">${s.status.toUpperCase()}</span></article>`).join("");
+ document.getElementById("availableCount").textContent=slots.filter(s=>s.status==="available").length;
+ document.getElementById("occupiedCount").textContent=slots.filter(s=>s.status==="occupied").length;
+ document.getElementById("totalCount").textContent=slots.length;
+}
+document.getElementById("search").addEventListener("input",render);
+document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.filter;document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("active",x===b));render()}));
+document.getElementById("toggleDemo").addEventListener("click",()=>{const s=slots[Math.floor(Math.random()*slots.length)];s.status=s.status==="available"?"occupied":"available";render()});
+render();
+</script>
+</body></html>
